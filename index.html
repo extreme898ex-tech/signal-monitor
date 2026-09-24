@@ -1,0 +1,36 @@
+<!doctype html><html lang="ja" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>売買シグナル一覧（サーバー監視版）</title>
+<style>
+body{font-family:"Hiragino Kaku Gothic ProN",Arial,sans-serif;margin:0;background:#f5f6f8;color:#1a1a1a}
+header{background:#1d2b45;color:#fff;padding:14px 18px}
+h1{font-size:1.05rem;margin:0 0 4px}
+#meta{font-size:.8rem;opacity:.8}
+main{max-width:860px;margin:16px auto;padding:0 12px}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:.88rem}
+th{background:#eef1f6;padding:7px 8px;border:1px solid #c9d0da;text-align:left;white-space:nowrap}
+td{padding:6px 8px;border:1px solid #c9d0da}
+td.sym{font-family:Consolas,monospace;white-space:nowrap}
+.buy{color:#c62828;font-weight:700}.sell{color:#1565c0;font-weight:700}
+.err{color:#999}.up{color:#2e7d32}.dn{color:#c62828}
+small.hint{color:#666}
+</style></head><body>
+<header><h1>売買シグナル一覧（サーバー監視版）</h1><div id="meta">読み込み中…</div></header>
+<main>
+<p><small class="hint">この一覧はサーバーが自動更新しています。お使いのブラウザはデータを取りに行かないので、回線の制限を受けません（5分ごとに再読込）。</small></p>
+<table><thead><tr><th>銘柄</th><th>記号</th><th>分類</th><th>最新シグナル</th><th>シグナル日</th><th>終値</th><th>ジャッジ</th><th>取得元</th></tr></thead><tbody id="tb"><tr><td colspan="8">読み込み中…</td></tr></tbody></table>
+</main>
+<script>
+function load(){
+  fetch('signals.json?t=' + Date.now()).then(r => r.json()).then(j => {
+    document.getElementById('meta').textContent = '最終計算: ' + j.generated_at;
+    document.getElementById('tb').innerHTML = j.results.map(r => {
+      if (r.error) return '<tr><td>' + r.name + '</td><td class="sym">' + r.sym + '</td><td>' + (r.cat || '') + '</td><td class="err" colspan="5">取得失敗</td></tr>';
+      const s = r.signal, sl = s ? '<span class="' + (s.type === 'buy' ? 'buy' : 'sell') + '">' + (s.type === 'buy' ? '★買い' : '●売り') + '</span>' : '—';
+      const jd = r.judge === 1 ? '<span class="up">買い圏</span>' : r.judge === -1 ? '<span class="dn">売り圏</span>' : '—';
+      return '<tr><td>' + r.name + '</td><td class="sym">' + r.sym + '</td><td>' + r.cat + '</td><td>' + sl + '</td><td>' + (s ? s.date : '—') + '</td><td>' + (r.close != null ? r.close.toLocaleString('ja-JP') : '—') + '</td><td>' + jd + '</td><td>' + r.via + '</td></tr>';
+    }).join('');
+  }).catch(() => { document.getElementById('meta').textContent = 'signals.json を読み込めませんでした'; });
+}
+load(); setInterval(load, 5 * 60 * 1000);
+</script></body></html>
