@@ -1,36 +1,72 @@
-<!doctype html><html lang="ja" data-theme="light"><head><meta charset="utf-8">
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>売買シグナル一覧（サーバー監視版）</title>
 <style>
-body{font-family:"Hiragino Kaku Gothic ProN",Arial,sans-serif;margin:0;background:#f5f6f8;color:#1a1a1a}
-header{background:#1d2b45;color:#fff;padding:14px 18px}
-h1{font-size:1.05rem;margin:0 0 4px}
-#meta{font-size:.8rem;opacity:.8}
-main{max-width:860px;margin:16px auto;padding:0 12px}
-table{border-collapse:collapse;width:100%;background:#fff;font-size:.88rem}
-th{background:#eef1f6;padding:7px 8px;border:1px solid #c9d0da;text-align:left;white-space:nowrap}
-td{padding:6px 8px;border:1px solid #c9d0da}
-td.sym{font-family:Consolas,monospace;white-space:nowrap}
-.buy{color:#c62828;font-weight:700}.sell{color:#1565c0;font-weight:700}
-.err{color:#999}.up{color:#2e7d32}.dn{color:#c62828}
-small.hint{color:#666}
+  :root{
+    --paper:#F7F4EC; --paper-2:#EFEAE0; --ink:#26292E; --ink-soft:#5C6470;
+    --buy:#B5442E; --buy-soft:#F3DDD5; --sell:#1F5F8B; --sell-soft:#DCE8F1;
+    --gold:#9A7B24; --line:#C9C2B2; --card:#FFFDF7;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:1.6;
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Noto Sans CJK JP",sans-serif}
+  .serif{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif}
+  header{border-bottom:2px solid var(--ink); padding:14px 20px 12px; background:var(--paper)}
+  header h1{font-size:1.12rem; letter-spacing:.06em; font-weight:700}
+  header h1 small{font-size:.72rem; color:var(--ink-soft); margin-left:.6em; letter-spacing:.15em}
+  #status{font-size:.72rem; color:var(--ink-soft); margin-top:4px}
+  #status .ok{color:#2e7d32; font-weight:700} #status .ng{color:var(--buy); font-weight:700}
+  .chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px}
+  .chip{font-size:.68rem; border:1.5px solid var(--ink); background:var(--card); padding:1px 10px; border-radius:2px}
+  .chip.b{background:var(--buy-soft)} .chip.s{background:var(--sell-soft)}
+  main{max-width:960px; margin:16px auto; padding:0 12px 40px}
+  .note{font-size:.72rem; color:var(--ink-soft); border-left:3px solid var(--gold); padding:2px 0 2px 10px; margin-bottom:14px}
+  table{border-collapse:collapse; width:100%; background:var(--card); font-size:.86rem}
+  th,td{border:1px solid var(--line); padding:6px 9px; text-align:left}
+  th{background:var(--paper-2); font-size:.72rem; letter-spacing:.12em; color:var(--ink-soft); white-space:nowrap}
+  tr:nth-child(even) td{background:#FBF8F0}
+  td.sym{font-family:"SFMono-Regular",Consolas,"Courier New",monospace; font-size:.78rem; white-space:nowrap}
+  .buy{color:var(--buy); font-weight:700} .sell{color:var(--sell); font-weight:700}
+  .tag{display:inline-block; font-size:.7rem; font-weight:700; padding:0 8px; border-radius:2px}
+  .tag.buy{background:var(--buy-soft)} .tag.sell{background:var(--sell-soft)}
+  .err{color:var(--ink-soft)} .err b{color:var(--buy)}
+  .up{color:#2e7d32; font-weight:700} .dn{color:var(--buy); font-weight:700}
+  .via{font-size:.68rem; color:var(--ink-soft); border:1px solid var(--line); padding:0 6px; border-radius:2px; background:var(--paper-2)}
+  .num{font-family:"SFMono-Regular",Consolas,"Courier New",monospace; text-align:right; white-space:nowrap}
+  footer{max-width:960px; margin:0 auto; padding:10px 12px 30px; font-size:.68rem; color:var(--ink-soft)}
 </style></head><body>
-<header><h1>売買シグナル一覧（サーバー監視版）</h1><div id="meta">読み込み中…</div></header>
+<header>
+  <h1 class="serif">売買シグナル一覧<small>サーバー監視版</small></h1>
+  <div id="status">読み込み中…</div>
+  <div class="chips" id="chips"></div>
+</header>
 <main>
-<p><small class="hint">この一覧はサーバーが自動更新しています。お使いのブラウザはデータを取りに行かないので、回線の制限を受けません（5分ごとに再読込）。</small></p>
-<table><thead><tr><th>銘柄</th><th>記号</th><th>分類</th><th>最新シグナル</th><th>シグナル日</th><th>終値</th><th>ジャッジ</th><th>取得元</th></tr></thead><tbody id="tb"><tr><td colspan="8">読み込み中…</td></tr></tbody></table>
+<p class="note">この一覧はGitHubのサーバーが自動計算しています。お使いのブラウザはデータを取りに行かないので、回線の制限を受けません（5分ごとに再読込）。</p>
+<table><thead><tr><th>銘柄</th><th>記号</th><th>分類</th><th>最新シグナル</th><th>シグナル日</th><th>終値</th><th>ジャッジ</th><th>取得元</th></tr></thead>
+<tbody id="tb"><tr><td colspan="8">読み込み中…</td></tr></tbody></table>
 </main>
+<footer>計算ロジックは Excel（pfc3）と同じエンジンを使用。シグナルが出た銘柄はメール／LINEにも通知されます。</footer>
 <script>
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function load(){
   fetch('signals.json?t=' + Date.now()).then(r => r.json()).then(j => {
-    document.getElementById('meta').textContent = '最終計算: ' + j.generated_at;
+    const ok = j.results.filter(r => !r.error), ng = j.results.length - ok.length;
+    const buys = ok.filter(r => r.signal && r.signal.type === 'buy').length,
+          sells = ok.filter(r => r.signal && r.signal.type === 'sell').length;
+    document.getElementById('status').innerHTML = '最終計算: ' + esc(j.generated_at)
+      + ' ／ 取得成功 <span class="ok">' + ok.length + '/' + j.results.length + '銘柄</span>'
+      + (ng ? '（失敗 <span class="ng">' + ng + '</span>）' : '');
+    document.getElementById('chips').innerHTML =
+      '<span class="chip b">★買いシグナル ' + buys + '銘柄</span>'
+      + '<span class="chip s">●売りシグナル ' + sells + '銘柄</span>';
     document.getElementById('tb').innerHTML = j.results.map(r => {
-      if (r.error) return '<tr><td>' + r.name + '</td><td class="sym">' + r.sym + '</td><td>' + (r.cat || '') + '</td><td class="err" colspan="5">取得失敗</td></tr>';
-      const s = r.signal, sl = s ? '<span class="' + (s.type === 'buy' ? 'buy' : 'sell') + '">' + (s.type === 'buy' ? '★買い' : '●売り') + '</span>' : '—';
+      if (r.error) return '<tr><td>' + esc(r.name) + '</td><td class="sym">' + esc(r.sym) + '</td><td>' + esc(r.cat || '') + '</td><td class="err" colspan="5">取得失敗 <b>(' + esc(r.error) + ')</b></td></tr>';
+      const s = r.signal;
+      const sl = s ? '<span class="tag ' + s.type + '">' + (s.type === 'buy' ? '★買い' : '●売り') + '</span>' : '—';
       const jd = r.judge === 1 ? '<span class="up">買い圏</span>' : r.judge === -1 ? '<span class="dn">売り圏</span>' : '—';
-      return '<tr><td>' + r.name + '</td><td class="sym">' + r.sym + '</td><td>' + r.cat + '</td><td>' + sl + '</td><td>' + (s ? s.date : '—') + '</td><td>' + (r.close != null ? r.close.toLocaleString('ja-JP') : '—') + '</td><td>' + jd + '</td><td>' + r.via + '</td></tr>';
+      return '<tr><td>' + esc(r.name) + '</td><td class="sym">' + esc(r.sym) + '</td><td>' + esc(r.cat) + '</td><td>' + sl + '</td><td>' + (s ? s.date : '—') + '</td><td class="num">' + (r.close != null ? r.close.toLocaleString('ja-JP') : '—') + '</td><td>' + jd + '</td><td><span class="via">' + esc(r.via) + '</span></td></tr>';
     }).join('');
-  }).catch(() => { document.getElementById('meta').textContent = 'signals.json を読み込めませんでした'; });
+  }).catch(() => { document.getElementById('status').textContent = 'signals.json を読み込めませんでした（初回実行前にこのページを見ると出ます。Actionsを一度実行してください）'; });
 }
 load(); setInterval(load, 5 * 60 * 1000);
 </script></body></html>

@@ -3,6 +3,9 @@
  *   WEB3FORMS_ACCESS_KEY  メール通知用（任意。未設定ならメール送信なし）
  *   NOTIFY_EMAIL_TO       送信先メールアドレス（任意・未設定ならキー主の宛先）
  *   LINE_TOKEN / LINE_USER_ID  LINE通知用（任意。未設定ならLINE送信なし）
+ *
+ * 取得方式: 6経路（直接続+中継5系統）を同時に試して最速の成功を採用（アプリと同じ発想）。
+ * それでも失敗した銘柄は20秒・40秒空けて最大2回の再試行パスを回す。
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -16,6 +19,14 @@ const UA = { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const nowJST = () => new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
 
+const RELAYS = [
+  u => u,                                                              /* 直接続 */
+  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+  u => 'https://corsproxy.io/?url=' + encodeURIComponent(u),
+  u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+  u => 'https://test.cors.workers.dev/?' + u,
+  u => 'https://r.jina.ai/' + u
+];
 async function getText(url){
   const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000);
   try { const r = await fetch(url, { headers: UA, signal: ctl.signal });
@@ -23,11 +34,18 @@ async function getText(url){
     return await r.text();
   } finally { clearTimeout(tm); }
 }
-const VIA = [u => u, u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u)];
-async function getTextAny(url){   /* 直 → 中継の順。サーバー側でも429・ボット対策に備える */
-  let err;
-  for (const f of VIA){ try { const t = await getText(f(url)); if (t) return t; } catch(e){ err = e; } }
-  throw err || new Error('fetch failed');
+/* 6経路を同時に走らせ、成功した中で一番早く返ったものを採用（全員の完了を待たない） */
+function getTextRace(url){
+  return new Promise((resolve, reject) => {
+    let pending = RELAYS.length, done = false;
+    RELAYS.forEach(f => {
+      getText(f(url)).then(t => {
+        if (t && !done){ done = true; resolve(t); }
+      }).catch(() => {}).finally(() => {
+        if (--pending === 0 && !done) reject(new Error('all paths failed'));
+      });
+    });
+  });
 }
 const STOOQ_MAP = { '^N225':'^nkx', '^DJI':'^dji', '^GSPC':'^spx', '^IXIC':'^ndq', 'CL=F':'cl.f', 'BZ=F':'cb.f', 'GC=F':'gc.f' };
 function stooqSym(sym){
@@ -39,6 +57,13 @@ function stooqSym(sym){
   return null;
 }
 const CG_MAP = { 'BTC-JPY':['bitcoin','jpy'], 'ETH-JPY':['ethereum','jpy'], 'XRP-JPY':['xrp','jpy'], 'SOL-JPY':['solana','jpy'], 'DOGE-JPY':['dogecoin','jpy'], 'BTC-USD':['bitcoin','usd'] };
+/* CoinGeckoは無料枠の回数制限が厳しいので呼び出し間隔を1.2秒空ける */
+let cgChain = Promise.resolve();
+function cgThrottled(url){
+  const run = cgChain.then(() => Promise.all([getTextRace(url), sleep(1200)]).then(v => v[0]));
+  cgChain = run.catch(() => {});
+  return run;
+}
 function parseCSV(text){
   const p2 = v => String(v).padStart(2, '0'), rows = [];
   let closeIdx = -1;
@@ -65,28 +90,33 @@ function parseCSV(text){
   if (rows.length < 40) throw new Error('data too short');
   return { dates: rows.map(r => r[0]), closes: rows.map(r => r[1]) };
 }
-async function fetchOne(sym){   /* Yahoo → Stooq → CoinGecko の順（サーバーからは中継不要） */
-  try {
-    const u = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?range=10mo&interval=1d';
-    const j = JSON.parse(await getTextAny(u));
-    const res = j.chart.result[0], ts = res.timestamp || [], q = res.indicators.quote[0].close || [];
-    const dates = [], closes = [];
-    for (let i = 0; i < ts.length; i++){ if (q[i] != null && isFinite(q[i])){ dates.push(new Date(ts[i] * 1000).toISOString().slice(0, 10)); closes.push(q[i]); } }
-    if (closes.length >= 40) return { dates, closes, via: 'yahoo' };
-    throw new Error('short');
-  } catch(e1){
-    const ss = stooqSym(sym);
-    if (ss){
-      try { const r = parseCSV(await getTextAny('https://stooq.com/q/d/l/?s=' + encodeURIComponent(ss) + '&i=d'));
-        return { ...r, via: 'stooq' }; } catch(e2){}
-    }
-    const cc = CG_MAP[sym];
-    if (cc){
-      const j = JSON.parse(await getText('https://api.coingecko.com/api/v3/coins/' + cc[0] + '/market_chart?vs_currency=' + cc[1] + '&days=365&interval=daily'));
-      return { dates: j.prices.map(x => new Date(x[0]).toISOString().slice(0, 10)), closes: j.prices.map(x => x[1]), via: 'coingecko' };
-    }
-    throw new Error('all sources failed');
+async function yahooChart(sym){   /* query1 → query2 の両ホストを試す */
+  let err;
+  for (const host of ['query1', 'query2']){
+    try {
+      const j = JSON.parse(await getTextRace('https://' + host + '.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?range=10mo&interval=1d'));
+      const res = j.chart.result[0], ts = res.timestamp || [], q = res.indicators.quote[0].close || [];
+      const dates = [], closes = [];
+      for (let i = 0; i < ts.length; i++){ if (q[i] != null && isFinite(q[i])){ dates.push(new Date(ts[i] * 1000).toISOString().slice(0, 10)); closes.push(q[i]); } }
+      if (closes.length >= 40) return { dates, closes, via: 'yahoo' };
+      throw new Error('short');
+    } catch(e){ err = e; }
   }
+  throw err;
+}
+async function fetchOne(sym){   /* Yahoo → Stooq → CoinGecko の順 */
+  try { return await yahooChart(sym); } catch(e1){}
+  const ss = stooqSym(sym);
+  if (ss){
+    try { const r = parseCSV(await getTextRace('https://stooq.com/q/d/l/?s=' + encodeURIComponent(ss) + '&i=d'));
+      return { ...r, via: 'stooq' }; } catch(e2){}
+  }
+  const cc = CG_MAP[sym];
+  if (cc){
+    const j = JSON.parse(await cgThrottled('https://api.coingecko.com/api/v3/coins/' + cc[0] + '/market_chart?vs_currency=' + cc[1] + '&days=365&interval=daily'));
+    return { dates: j.prices.map(x => new Date(x[0]).toISOString().slice(0, 10)), closes: j.prices.map(x => x[1]), via: 'coingecko' };
+  }
+  throw new Error('all sources failed');
 }
 async function notify(text){
   const sent = [];
@@ -117,19 +147,29 @@ async function notify(text){
         close: d.closes[d.closes.length - 1], signal: sig, judge: js.state });
     } catch(e){ out.push({ name: it.n, sym: it.s, cat: it.cat, error: String(e.message || e) }); }
   }
-  const CH = 5;
-  for (let i = 0; i < ALL.length; i += CH){ await Promise.all(ALL.slice(i, i + CH).map(one)); await sleep(300); }
-  const failed = ALL.filter(it => out.find(o => o.sym === it.s && o.error));
-  for (let i = 0; i < failed.length; i += CH){   /* 失敗銘柄だけ最後にもう1回（経路は中継側） */
-    await Promise.all(failed.slice(i, i + CH).map(it => one(it)));
-    failed.slice(i, i + CH).forEach(it => { const o = out.find(x => x.sym === it.s); if (o && o.error) out.splice(out.indexOf(o), 1); });
-    await sleep(300);
+  const CH = 4;
+  for (let i = 0; i < ALL.length; i += CH){ await Promise.all(ALL.slice(i, i + CH).map(one)); await sleep(500); }
+  /* 失敗銘柄だけ20秒・40秒空けて2回の再試行（経路は毎回全6経路レース） */
+  for (const wait of [20000, 40000]){
+    let failed = ALL.filter(it => out.find(o => o.sym === it.s && o.error));
+    if (!failed.length) break;
+    console.log('retry pass: ' + failed.length + ' symbols, waiting ' + wait / 1000 + 's');
+    await sleep(wait);
+    for (let i = 0; i < failed.length; i += CH){
+      await Promise.all(failed.slice(i, i + CH).map(it => one(it)));
+      failed.slice(i, i + CH).forEach(it => { const o = out.find(x => x.sym === it.s); if (o && o.error) out.splice(out.indexOf(o), 1); });
+      await sleep(500);
+    }
   }
   const prevOut = existsSync('signals.json') ? JSON.parse(readFileSync('signals.json', 'utf8')) : null;
   writeFileSync('signals.json', JSON.stringify({ generated_at: nowJST(), results: out }, null, 1));
   writeFileSync('state.json', JSON.stringify(state, null, 1));
   const okN = out.filter(r => !r.error).length, errN = out.length - okN;
-  let log = 'シグナル監視 ' + nowJST() + ' ／ 取得成功 ' + okN + '/' + out.length + '銘柄' + (errN ? '（失敗: ' + out.filter(r => r.error).map(r => r.sym).join(' ') + '）' : '');
+  const viaCount = {};
+  out.filter(r => !r.error).forEach(r => viaCount[r.via] = (viaCount[r.via] || 0) + 1);
+  let log = 'シグナル監視 ' + nowJST() + ' ／ 取得成功 ' + okN + '/' + out.length + '銘柄'
+    + '（via: ' + Object.entries(viaCount).map(([k, v]) => k + '=' + v).join(' ') + '）'
+    + (errN ? '（失敗: ' + out.filter(r => r.error).map(r => r.sym).join(' ') + '）' : '');
   if (news.length){
     log += '\n\n■ 新規シグナル ' + news.length + '件\n' + news.map(n =>
       '・' + n.n + '（' + n.s + '）' + (n.sig.type === 'buy' ? '★買い' : '●売り') + ' シグナル日 ' + n.sig.date + ' 終値 ' + n.sig.price).join('\n');
