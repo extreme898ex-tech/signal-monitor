@@ -158,5 +158,10 @@
   "type": "buy",
   "date": "2026-09-24",
   "price": 1732.5
+ },
+ "EURUSD=X": {
+  "type": "sell",
+  "date": "2026-09-14",
+  "price": 1.139
  }
 }
