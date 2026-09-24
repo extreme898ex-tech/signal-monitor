@@ -36,12 +36,12 @@
   footer{max-width:960px; margin:0 auto; padding:10px 12px 30px; font-size:.68rem; color:var(--ink-soft)}
 </style></head><body>
 <header>
-  <h1 class="serif">売買シグナル一覧<small>サーバー監視版</small></h1>
+  <h1 class="serif">売買シグナル一覧<small>サーバー監視版・手動更新</small></h1>
   <div id="status">読み込み中…</div>
   <div class="chips" id="chips"></div>
 </header>
 <main>
-<p class="note">この一覧はGitHubのサーバーが自動計算しています。お使いのブラウザはデータを取りに行かないので、回線の制限を受けません（5分ごとに再読込）。</p>
+<p class="note">この一覧は「必要な時だけ」更新します。GitHubのActionsタブ → signal-monitor → <b>Run workflow</b> を押すと、サーバーがデータを取りに行って一覧を作り直します。このページを開きっぱなしにしても勝手に取りに行きません（「再読込」ボタンで表示を更新）。</p>
 <table><thead><tr><th>銘柄</th><th>記号</th><th>分類</th><th>最新シグナル</th><th>シグナル日</th><th>終値</th><th>ジャッジ</th><th>取得元</th></tr></thead>
 <tbody id="tb"><tr><td colspan="8">読み込み中…</td></tr></tbody></table>
 </main>
@@ -68,5 +68,12 @@ function load(){
     }).join('');
   }).catch(() => { document.getElementById('status').textContent = 'signals.json を読み込めませんでした（初回実行前にこのページを見ると出ます。Actionsを一度実行してください）'; });
 }
-load(); setInterval(load, 5 * 60 * 1000);
+load();   /* 自動再読込はしない。必要な時だけ下のボタンかブラウザの再読み込みで更新 */
+document.addEventListener('DOMContentLoaded', () => {
+  const b = document.createElement('button');
+  b.textContent = '再読込'; b.type = 'button';
+  b.style.cssText = 'font:inherit;font-size:.78rem;border:1.5px solid var(--ink);background:var(--card);padding:3px 14px;cursor:pointer;border-radius:2px;margin-top:6px';
+  b.addEventListener('click', () => { b.disabled = true; b.textContent = '読み込み中…'; load(); setTimeout(() => { b.disabled = false; b.textContent = '再読込'; }, 600); });
+  document.querySelector('header').appendChild(b);
+});
 </script></body></html>
