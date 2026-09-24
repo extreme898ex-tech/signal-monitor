@@ -9,9 +9,34 @@
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { ALL } from './symbols.mjs';
+import { ALL as ALL_MJS } from './symbols.mjs';
 const require = createRequire(import.meta.url);
 const E = require('./engine.js');
+
+/* 銘柄リストは symbols.csv から読む（GitHubのWeb画面で編集すれば追加・削除できる）。
+ * 列: 銘柄名,記号,分類,ボックス   （ボックス = 監視に使う箱の値。空行や#で始まる行は無視）
+ * symbols.csv が無い・読めないときは内蔵マスタ（symbols.mjs）を使う。 */
+function loadSymbols(){
+  try {
+    if (!existsSync('symbols.csv')) throw new Error('no symbols.csv');
+    const list = readFileSync('symbols.csv', 'utf8').split(/\r?\n/).map(l => l.trim())
+      .filter(l => l && !l.startsWith('#'));
+    const out = [];
+    for (const line of list){
+      if (/^銘柄名/.test(line)) continue;   /* 見出し行 */
+      const c = line.split(',').map(s => s.trim().replace(/^"|"$/g, ''));
+      if (c.length < 2 || !c[1]) continue;
+      const box = parseFloat(c[3]);
+      out.push({ n: c[0] || c[1], s: c[1], cat: c[2] || 'その他', boxes: [isFinite(box) && box > 0 ? box : 20] });
+    }
+    if (!out.length) throw new Error('symbols.csv is empty');
+    console.log('symbols: ' + out.length + ' (from symbols.csv)');
+    return out;
+  } catch(e){
+    console.log('symbols: ' + ALL_MJS.length + ' (built-in)');
+    return ALL_MJS;
+  }
+}
 
 const F = process.env.WEB3FORMS_ACCESS_KEY, TO = process.env.NOTIFY_EMAIL_TO;
 const LT = process.env.LINE_TOKEN, LU = process.env.LINE_USER_ID;
@@ -130,6 +155,7 @@ async function notify(text){
   return sent;
 }
 (async () => {
+  const SYMS = loadSymbols();
   const state = existsSync('state.json') ? JSON.parse(readFileSync('state.json', 'utf8')) : {};
   const out = [], news = [];
   async function one(it){
@@ -148,10 +174,10 @@ async function notify(text){
     } catch(e){ out.push({ name: it.n, sym: it.s, cat: it.cat, error: String(e.message || e) }); }
   }
   const CH = 4;
-  for (let i = 0; i < ALL.length; i += CH){ await Promise.all(ALL.slice(i, i + CH).map(one)); await sleep(500); }
+  for (let i = 0; i < SYMS.length; i += CH){ await Promise.all(SYMS.slice(i, i + CH).map(one)); await sleep(500); }
   /* 失敗銘柄だけ20秒・40秒空けて2回の再試行（経路は毎回全6経路レース） */
   for (const wait of [20000, 40000]){
-    let failed = ALL.filter(it => out.find(o => o.sym === it.s && o.error));
+    let failed = SYMS.filter(it => out.find(o => o.sym === it.s && o.error));
     if (!failed.length) break;
     console.log('retry pass: ' + failed.length + ' symbols, waiting ' + wait / 1000 + 's');
     await sleep(wait);
