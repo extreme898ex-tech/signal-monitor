@@ -70,9 +70,9 @@
   "price": 157.627
  },
  "9433.T": {
-  "type": "sell",
-  "date": "2026-09-24",
-  "price": 3039
+  "type": "buy",
+  "date": "2026-09-16",
+  "price": 3044
  },
  "^GSPC": {
   "type": "buy",
@@ -88,5 +88,70 @@
   "type": "buy",
   "date": "2026-09-18",
   "price": 33430
+ },
+ "7974.T": {
+  "type": "buy",
+  "date": "2026-09-17",
+  "price": 8235
+ },
+ "6367.T": {
+  "type": "buy",
+  "date": "2026-09-17",
+  "price": 20895
+ },
+ "^DJI": {
+  "type": "sell",
+  "date": "2026-09-23",
+  "price": 51511.602
+ },
+ "MSFT": {
+  "type": "sell",
+  "date": "2026-09-16",
+  "price": 500.59
+ },
+ "AUDJPY=X": {
+  "type": "sell",
+  "date": "2026-09-07",
+  "price": 111.071
+ },
+ "GBPJPY=X": {
+  "type": "buy",
+  "date": "2026-09-15",
+  "price": 209.122
+ },
+ "CHFJPY=X": {
+  "type": "buy",
+  "date": "2026-09-20",
+  "price": 191.659
+ },
+ "^N225": {
+  "type": "buy",
+  "date": "2026-09-24",
+  "price": 65883.406
+ },
+ "9983.T": {
+  "type": "buy",
+  "date": "2026-09-16",
+  "price": 68280
+ },
+ "6501.T": {
+  "type": "sell",
+  "date": "2026-09-02",
+  "price": 5552
+ },
+ "1306.T": {
+  "type": "buy",
+  "date": "2026-04-08",
+  "price": 427.1
+ },
+ "AAPL": {
+  "type": "buy",
+  "date": "2026-09-11",
+  "price": 337.02
+ },
+ "BZ=F": {
+  "type": "sell",
+  "date": "2026-09-24",
+  "price": 97.36
  }
 }
