@@ -71,8 +71,8 @@
  },
  "BZ=F": {
   "type": "sell",
-  "date": "2026-09-17",
-  "price": 105.09
+  "date": "2026-09-25",
+  "price": 98.18
  },
  "GBPUSD=X": {
   "type": "sell",
@@ -80,14 +80,14 @@
   "price": 1.322
  },
  "BTC-JPY": {
-  "type": "sell",
-  "date": "2026-09-25",
-  "price": 13321634
+  "type": "buy",
+  "date": "2026-09-19",
+  "price": 13517702.432
  },
  "ETH-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 428756.191
+  "date": "2026-09-18",
+  "price": 431077.563
  },
  "DOGE-JPY": {
   "type": "buy",
@@ -191,8 +191,8 @@
  },
  "XRP-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 238.768
+  "date": "2026-09-25",
+  "price": 249.066
  },
  "1306.T": {
   "type": "buy",
