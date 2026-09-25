@@ -81,23 +81,23 @@
  },
  "BTC-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 13447882.511
+  "date": "2026-09-18",
+  "price": 13436281
  },
  "ETH-JPY": {
   "type": "buy",
-  "date": "2026-09-18",
-  "price": 426320.625
+  "date": "2026-09-19",
+  "price": 428396.677
  },
  "DOGE-JPY": {
   "type": "buy",
-  "date": "2026-09-18",
-  "price": 15.207
+  "date": "2026-09-19",
+  "price": 15.308
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-21",
-  "price": 18661.529
+  "date": "2026-09-25",
+  "price": 18791.339
  },
  "BTC-USD": {
   "type": "buy",
