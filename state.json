@@ -80,14 +80,14 @@
   "price": 1.322
  },
  "BTC-JPY": {
-  "type": "buy",
-  "date": "2026-09-19",
-  "price": 13358976.413
+  "type": "sell",
+  "date": "2026-09-25",
+  "price": 13321634
  },
  "ETH-JPY": {
-  "type": "buy",
-  "date": "2026-09-19",
-  "price": 424850.025
+  "type": "sell",
+  "date": "2026-09-25",
+  "price": 424367.938
  },
  "DOGE-JPY": {
   "type": "buy",
