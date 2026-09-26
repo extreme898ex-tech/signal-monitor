@@ -15,9 +15,9 @@
   "price": 5903
  },
  "MSFT": {
-  "type": "sell",
-  "date": "2026-09-16",
-  "price": 497.93
+  "type": "buy",
+  "date": "2026-09-25",
+  "price": 516.17
  },
  "^GSPC": {
   "type": "buy",
