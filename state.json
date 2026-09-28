@@ -1,8 +1,8 @@
 {
  "8306.T": {
-  "type": "buy",
-  "date": "2026-09-28",
-  "price": 3722
+  "type": "sell",
+  "date": "2026-09-24",
+  "price": 3711
  },
  "^N225": {
   "type": "buy",
@@ -71,8 +71,8 @@
  },
  "BZ=F": {
   "type": "sell",
-  "date": "2026-09-28",
-  "price": 98.44
+  "date": "2026-09-17",
+  "price": 99.1
  },
  "GBPUSD=X": {
   "type": "sell",
@@ -96,8 +96,8 @@
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-26",
-  "price": 19149.181
+  "date": "2026-09-25",
+  "price": 18918.455
  },
  "BTC-USD": {
   "type": "buy",
@@ -190,9 +190,9 @@
   "price": 4289
  },
  "XRP-JPY": {
-  "type": "buy",
-  "date": "2026-09-19",
-  "price": 244.396
+  "type": "sell",
+  "date": "2026-09-28",
+  "price": 235.884
  },
  "1306.T": {
   "type": "buy",
