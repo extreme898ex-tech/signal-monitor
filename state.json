@@ -50,9 +50,9 @@
   "price": 180.456
  },
  "CHFJPY=X": {
-  "type": "sell",
-  "date": "2026-09-28",
-  "price": 188.615
+  "type": "buy",
+  "date": "2026-09-20",
+  "price": 189.156
  },
  "AUDJPY=X": {
   "type": "sell",
@@ -65,14 +65,14 @@
   "price": 0.702
  },
  "CL=F": {
-  "type": "buy",
-  "date": "2026-09-28",
-  "price": 95.07
+  "type": "sell",
+  "date": "2026-09-18",
+  "price": 92.78
  },
  "BZ=F": {
   "type": "sell",
-  "date": "2026-09-17",
-  "price": 99.1
+  "date": "2026-09-28",
+  "price": 98.1
  },
  "GBPUSD=X": {
   "type": "sell",
@@ -91,13 +91,13 @@
  },
  "DOGE-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 14.838
+  "date": "2026-09-18",
+  "price": 14.797
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-26",
-  "price": 18783.441
+  "date": "2026-09-25",
+  "price": 18746.021
  },
  "BTC-USD": {
   "type": "buy",
