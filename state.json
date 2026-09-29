@@ -50,9 +50,9 @@
   "price": 180.456
  },
  "CHFJPY=X": {
-  "type": "buy",
-  "date": "2026-09-20",
-  "price": 189.146
+  "type": "sell",
+  "date": "2026-09-29",
+  "price": 188.694
  },
  "AUDJPY=X": {
   "type": "sell",
@@ -85,14 +85,14 @@
   "price": 13115733.591
  },
  "ETH-JPY": {
-  "type": "sell",
-  "date": "2026-09-26",
-  "price": 418796.267
+  "type": "buy",
+  "date": "2026-09-29",
+  "price": 427117.188
  },
  "DOGE-JPY": {
-  "type": "sell",
-  "date": "2026-09-29",
-  "price": 14.55
+  "type": "buy",
+  "date": "2026-09-18",
+  "price": 14.938
  },
  "SOL-JPY": {
   "type": "buy",
@@ -191,8 +191,8 @@
  },
  "XRP-JPY": {
   "type": "sell",
-  "date": "2026-09-29",
-  "price": 235.431
+  "date": "2026-09-28",
+  "price": 236.951
  },
  "1306.T": {
   "type": "buy",
