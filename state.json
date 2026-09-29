@@ -50,9 +50,9 @@
   "price": 180.456
  },
  "CHFJPY=X": {
-  "type": "buy",
-  "date": "2026-09-20",
-  "price": 189.156
+  "type": "sell",
+  "date": "2026-09-29",
+  "price": 188.941
  },
  "AUDJPY=X": {
   "type": "sell",
@@ -101,13 +101,13 @@
  },
  "BTC-USD": {
   "type": "buy",
-  "date": "2026-09-18",
-  "price": 83424.039
+  "date": "2026-09-19",
+  "price": 82931.617
  },
  "9984.T": {
   "type": "sell",
-  "date": "2026-09-25",
-  "price": 6150
+  "date": "2026-09-29",
+  "price": 6065
  },
  "9983.T": {
   "type": "buy",
@@ -186,8 +186,8 @@
  },
  "GC=F": {
   "type": "sell",
-  "date": "2026-09-29",
-  "price": 4151.7
+  "date": "2026-09-28",
+  "price": 4152.5
  },
  "XRP-JPY": {
   "type": "sell",
