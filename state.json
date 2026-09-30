@@ -30,9 +30,9 @@
   "price": 337.02
  },
  "GBPJPY=X": {
-  "type": "sell",
-  "date": "2026-09-30",
-  "price": 207.235
+  "type": "buy",
+  "date": "2026-09-15",
+  "price": 207.818
  },
  "NVDA": {
   "type": "sell",
@@ -45,9 +45,9 @@
   "price": 158.767
  },
  "EURJPY=X": {
-  "type": "sell",
-  "date": "2026-09-30",
-  "price": 177.588
+  "type": "buy",
+  "date": "2026-09-20",
+  "price": 178.088
  },
  "CHFJPY=X": {
   "type": "sell",
@@ -86,8 +86,8 @@
  },
  "ETH-JPY": {
   "type": "sell",
-  "date": "2026-09-26",
-  "price": 420037.804
+  "date": "2026-09-25",
+  "price": 417883.125
  },
  "DOGE-JPY": {
   "type": "buy",
@@ -96,8 +96,8 @@
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-25",
-  "price": 18753.723
+  "date": "2026-09-26",
+  "price": 18630.638
  },
  "BTC-USD": {
   "type": "buy",
@@ -165,9 +165,9 @@
   "price": 1.137
  },
  "CADJPY=X": {
-  "type": "sell",
-  "date": "2026-09-30",
-  "price": 110.527
+  "type": "buy",
+  "date": "2026-09-20",
+  "price": 110.663
  },
  "1320.T": {
   "type": "buy",
