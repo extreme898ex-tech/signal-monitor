@@ -1,8 +1,8 @@
 {
  "8306.T": {
-  "type": "buy",
-  "date": "2026-09-28",
-  "price": 3700
+  "type": "sell",
+  "date": "2026-10-01",
+  "price": 3586
  },
  "^N225": {
   "type": "buy",
@@ -56,8 +56,8 @@
  },
  "AUDJPY=X": {
   "type": "sell",
-  "date": "2026-10-01",
-  "price": 109.138
+  "date": "2026-09-30",
+  "price": 109.504
  },
  "AUDUSD=X": {
   "type": "sell",
@@ -85,9 +85,9 @@
   "price": 13342906.237
  },
  "ETH-JPY": {
-  "type": "buy",
-  "date": "2026-10-01",
-  "price": 427547.469
+  "type": "sell",
+  "date": "2026-09-25",
+  "price": 426871.063
  },
  "DOGE-JPY": {
   "type": "buy",
