@@ -46,8 +46,8 @@
  },
  "EURJPY=X": {
   "type": "sell",
-  "date": "2026-10-01",
-  "price": 177.174
+  "date": "2026-10-02",
+  "price": 177.7
  },
  "CHFJPY=X": {
   "type": "sell",
@@ -91,13 +91,13 @@
  },
  "DOGE-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 14.979
+  "date": "2026-09-18",
+  "price": 14.841
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-25",
-  "price": 18667.904
+  "date": "2026-09-26",
+  "price": 18706.755
  },
  "BTC-USD": {
   "type": "buy",
@@ -156,8 +156,8 @@
  },
  "7267.T": {
   "type": "sell",
-  "date": "2026-09-29",
-  "price": 1675
+  "date": "2026-10-02",
+  "price": 1660.5
  },
  "EURUSD=X": {
   "type": "sell",
@@ -186,8 +186,8 @@
  },
  "GC=F": {
   "type": "sell",
-  "date": "2026-09-28",
-  "price": 4152.5
+  "date": "2026-10-02",
+  "price": 4173.4
  },
  "XRP-JPY": {
   "type": "sell",
