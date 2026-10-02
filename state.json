@@ -30,9 +30,9 @@
   "price": 337.02
  },
  "GBPJPY=X": {
-  "type": "buy",
-  "date": "2026-09-15",
-  "price": 207.818
+  "type": "sell",
+  "date": "2026-10-02",
+  "price": 208.143
  },
  "NVDA": {
   "type": "sell",
@@ -66,8 +66,8 @@
  },
  "CL=F": {
   "type": "sell",
-  "date": "2026-09-29",
-  "price": 89.68
+  "date": "2026-10-02",
+  "price": 89.4
  },
  "BZ=F": {
   "type": "sell",
@@ -96,8 +96,8 @@
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-26",
-  "price": 19240.074
+  "date": "2026-09-25",
+  "price": 19190.828
  },
  "BTC-USD": {
   "type": "buy",
@@ -156,8 +156,8 @@
  },
  "7267.T": {
   "type": "sell",
-  "date": "2026-09-29",
-  "price": 1665.5
+  "date": "2026-10-02",
+  "price": 1664.5
  },
  "EURUSD=X": {
   "type": "sell",
