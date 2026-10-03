@@ -35,9 +35,9 @@
   "price": 208.576
  },
  "NVDA": {
-  "type": "sell",
-  "date": "2026-09-14",
-  "price": 230.86
+  "type": "buy",
+  "date": "2026-10-02",
+  "price": 233.95
  },
  "USDJPY=X": {
   "type": "buy",
@@ -91,13 +91,13 @@
  },
  "DOGE-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 14.602
+  "date": "2026-09-18",
+  "price": 14.723
  },
  "SOL-JPY": {
   "type": "buy",
-  "date": "2026-09-26",
-  "price": 18702.449
+  "date": "2026-09-25",
+  "price": 18816.682
  },
  "BTC-USD": {
   "type": "buy",
