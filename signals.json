@@ -1,40 +1,166 @@
 {
- "generated_at": "2026/10/3 22:36:18",
+ "generated_at": "2026/10/4 14:19:53",
  "results": [
   {
-   "name": "任天堂",
-   "sym": "7974.T",
+   "name": "三菱UFJ",
+   "sym": "8306.T",
    "cat": "日本株",
    "via": "yahoo",
    "last": "2026-10-02",
-   "close": 7849,
+   "close": 3544,
    "signal": {
     "type": "sell",
-    "date": "2026-09-28",
-    "price": 7849
+    "date": "2026-10-01",
+    "price": 3544
    },
    "judge": -1
   },
   {
-   "name": "S&P500",
-   "sym": "^GSPC",
+   "name": "トヨタ",
+   "sym": "7203.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 2856.5,
+   "signal": {
+    "type": "sell",
+    "date": "2026-09-29",
+    "price": 2856.5
+   },
+   "judge": -1
+  },
+  {
+   "name": "日経平均",
+   "sym": "^N225",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 68309.4609375,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-30",
+    "price": 68309.461
+   },
+   "judge": 1
+  },
+  {
+   "name": "日立",
+   "sym": "6501.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 5522,
+   "signal": {
+    "type": "sell",
+    "date": "2026-09-02",
+    "price": 5522
+   },
+   "judge": 1
+  },
+  {
+   "name": "ソフトバンクG",
+   "sym": "9984.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 6310,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-30",
+    "price": 6310
+   },
+   "judge": 1
+  },
+  {
+   "name": "ファーストリテイリング",
+   "sym": "9983.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 71770,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-29",
+    "price": 71770
+   },
+   "judge": 1
+  },
+  {
+   "name": "キーエンス",
+   "sym": "6857.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 38630,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-30",
+    "price": 38630
+   },
+   "judge": 1
+  },
+  {
+   "name": "ダイキン工業",
+   "sym": "6367.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 20585,
+   "signal": {
+    "type": "sell",
+    "date": "2026-10-02",
+    "price": 20585
+   },
+   "judge": 1
+  },
+  {
+   "name": "KDDI",
+   "sym": "9433.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 2896.5,
+   "signal": {
+    "type": "sell",
+    "date": "2026-09-24",
+    "price": 2896.5
+   },
+   "judge": -1
+  },
+  {
+   "name": "マイクロソフト",
+   "sym": "MSFT",
    "cat": "米国株",
    "via": "yahoo",
    "last": "2026-10-02",
-   "close": 7722.72021484375,
+   "close": 517.530029296875,
    "signal": {
     "type": "buy",
-    "date": "2026-08-03",
-    "price": 7722.72
+    "date": "2026-09-25",
+    "price": 517.53
    },
-   "judge": -1
+   "judge": 1
+  },
+  {
+   "name": "ポンド円",
+   "sym": "GBPJPY=X",
+   "cat": "FX",
+   "via": "yahoo",
+   "last": "2026-10-04",
+   "close": 209.0709991455078,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-15",
+    "price": 209.071
+   },
+   "judge": 1
   },
   {
    "name": "ドル円",
    "sym": "USDJPY=X",
    "cat": "FX",
    "via": "yahoo",
-   "last": "2026-10-03",
+   "last": "2026-10-04",
    "close": 157.8300018310547,
    "signal": {
     "type": "buy",
@@ -58,30 +184,16 @@
    "judge": 1
   },
   {
-   "name": "ユーロ円",
-   "sym": "EURJPY=X",
+   "name": "ユーロドル",
+   "sym": "EURUSD=X",
    "cat": "FX",
    "via": "yahoo",
-   "last": "2026-10-03",
-   "close": 177.25,
+   "last": "2026-10-02",
+   "close": 1.1257457733154297,
    "signal": {
     "type": "sell",
-    "date": "2026-10-01",
-    "price": 177.25
-   },
-   "judge": -1
-  },
-  {
-   "name": "カナダ円",
-   "sym": "CADJPY=X",
-   "cat": "FX",
-   "via": "yahoo",
-   "last": "2026-10-03",
-   "close": 110.76599884033203,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-20",
-    "price": 110.766
+    "date": "2026-09-14",
+    "price": 1.126
    },
    "judge": -1
   },
@@ -90,7 +202,7 @@
    "sym": "AUDJPY=X",
    "cat": "FX",
    "via": "yahoo",
-   "last": "2026-10-03",
+   "last": "2026-10-04",
    "close": 109.802001953125,
    "signal": {
     "type": "sell",
@@ -100,11 +212,39 @@
    "judge": -1
   },
   {
+   "name": "カナダ円",
+   "sym": "CADJPY=X",
+   "cat": "FX",
+   "via": "yahoo",
+   "last": "2026-10-04",
+   "close": 110.76599884033203,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-20",
+    "price": 110.766
+   },
+   "judge": -1
+  },
+  {
+   "name": "WTI先物",
+   "sym": "CL=F",
+   "cat": "原油",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 91.11000061035156,
+   "signal": {
+    "type": "sell",
+    "date": "2026-09-29",
+    "price": 91.11
+   },
+   "judge": -1
+  },
+  {
    "name": "豪ドルドル",
    "sym": "AUDUSD=X",
    "cat": "FX",
    "via": "yahoo",
-   "last": "2026-10-03",
+   "last": "2026-10-04",
    "close": 0.6957489848136902,
    "signal": {
     "type": "sell",
@@ -114,16 +254,170 @@
    "judge": -1
   },
   {
-   "name": "SPDRゴールド(東証)",
-   "sym": "1320.T",
-   "cat": "金",
-   "via": "yahoo",
-   "last": "2026-10-02",
-   "close": 70810,
+   "name": "ビットコイン(円)",
+   "sym": "BTC-JPY",
+   "cat": "仮想通貨",
+   "via": "coingecko",
+   "last": "2026-10-04",
+   "close": 13387705.864099404,
    "signal": {
     "type": "buy",
+    "date": "2026-10-02",
+    "price": 13387705.864
+   },
+   "judge": -1
+  },
+  {
+   "name": "イーサリアム(円)",
+   "sym": "ETH-JPY",
+   "cat": "仮想通貨",
+   "via": "coingecko",
+   "last": "2026-10-04",
+   "close": 425076.0980966258,
+   "signal": {
+    "type": "buy",
+    "date": "2026-10-02",
+    "price": 425076.098
+   },
+   "judge": -1
+  },
+  {
+   "name": "ビットコイン(ドル)",
+   "sym": "BTC-USD",
+   "cat": "仮想通貨",
+   "via": "yahoo",
+   "last": "2026-10-04",
+   "close": 84812.671875,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-18",
+    "price": 84812.672
+   },
+   "judge": -1
+  },
+  {
+   "name": "ドージコイン(円)",
+   "sym": "DOGE-JPY",
+   "cat": "仮想通貨",
+   "via": "yahoo",
+   "last": "2026-10-04",
+   "close": 14.63720703125,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-18",
+    "price": 14.637
+   },
+   "judge": -1
+  },
+  {
+   "name": "ソラナ(円)",
+   "sym": "SOL-JPY",
+   "cat": "仮想通貨",
+   "via": "coingecko",
+   "last": "2026-10-04",
+   "close": 19049.071508204146,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-26",
+    "price": 19049.072
+   },
+   "judge": -1
+  },
+  {
+   "name": "ソニーグループ",
+   "sym": "6758.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 3753,
+   "signal": {
+    "type": "sell",
+    "date": "2026-08-19",
+    "price": 3753
+   },
+   "judge": 1
+  },
+  {
+   "name": "東京エレクトロン",
+   "sym": "8035.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 12100,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-18",
+    "price": 12100
+   },
+   "judge": 1
+  },
+  {
+   "name": "NEXT FUNDS TOPIX",
+   "sym": "1306.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 430.20001220703125,
+   "signal": {
+    "type": "buy",
+    "date": "2026-04-08",
+    "price": 430.2
+   },
+   "judge": 1
+  },
+  {
+   "name": "NYダウ",
+   "sym": "^DJI",
+   "cat": "米国株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 51176.9609375,
+   "signal": {
+    "type": "sell",
     "date": "2026-09-30",
-    "price": 70810
+    "price": 51176.961
+   },
+   "judge": -1
+  },
+  {
+   "name": "ホンダ",
+   "sym": "7267.T",
+   "cat": "日本株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 1664.5,
+   "signal": {
+    "type": "sell",
+    "date": "2026-10-02",
+    "price": 1664.5
+   },
+   "judge": -1
+  },
+  {
+   "name": "ユーロ円",
+   "sym": "EURJPY=X",
+   "cat": "FX",
+   "via": "yahoo",
+   "last": "2026-10-04",
+   "close": 177.25,
+   "signal": {
+    "type": "sell",
+    "date": "2026-10-01",
+    "price": 177.25
+   },
+   "judge": -1
+  },
+  {
+   "name": "NASDAQ",
+   "sym": "^IXIC",
+   "cat": "米国株",
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 27190.859375,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-03",
+    "price": 27190.859
    },
    "judge": 1
   },
@@ -142,156 +436,30 @@
    "judge": -1
   },
   {
-   "name": "ビットコイン(円)",
-   "sym": "BTC-JPY",
-   "cat": "仮想通貨",
-   "via": "coingecko",
-   "last": "2026-10-03",
-   "close": 13383845.78186537,
-   "signal": {
-    "type": "buy",
-    "date": "2026-10-02",
-    "price": 13383845.782
-   },
-   "judge": -1
-  },
-  {
-   "name": "イーサリアム(円)",
-   "sym": "ETH-JPY",
-   "cat": "仮想通貨",
-   "via": "coingecko",
-   "last": "2026-10-03",
-   "close": 422726.8238272535,
-   "signal": {
-    "type": "buy",
-    "date": "2026-10-02",
-    "price": 422726.824
-   },
-   "judge": -1
-  },
-  {
-   "name": "ソラナ(円)",
-   "sym": "SOL-JPY",
-   "cat": "仮想通貨",
-   "via": "yahoo",
-   "last": "2026-10-03",
-   "close": 18848.53515625,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-25",
-    "price": 18848.535
-   },
-   "judge": -1
-  },
-  {
-   "name": "ドージコイン(円)",
-   "sym": "DOGE-JPY",
-   "cat": "仮想通貨",
-   "via": "yahoo",
-   "last": "2026-10-03",
-   "close": 14.613317489624023,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-18",
-    "price": 14.613
-   },
-   "judge": -1
-  },
-  {
-   "name": "ビットコイン(ドル)",
-   "sym": "BTC-USD",
-   "cat": "仮想通貨",
-   "via": "coingecko",
-   "last": "2026-10-03",
-   "close": 84796.67835644755,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-19",
-    "price": 84796.678
-   },
-   "judge": -1
-  },
-  {
-   "name": "日経平均",
-   "sym": "^N225",
-   "cat": "日本株",
+   "name": "SPDRゴールド(東証)",
+   "sym": "1320.T",
+   "cat": "金",
    "via": "yahoo",
    "last": "2026-10-02",
-   "close": 68309.4609375,
+   "close": 70810,
    "signal": {
     "type": "buy",
     "date": "2026-09-30",
-    "price": 68309.461
+    "price": 70810
    },
    "judge": 1
   },
   {
-   "name": "トヨタ",
-   "sym": "7203.T",
-   "cat": "日本株",
-   "via": "yahoo",
-   "last": "2026-10-02",
-   "close": 2856.5,
-   "signal": {
-    "type": "sell",
-    "date": "2026-09-29",
-    "price": 2856.5
-   },
-   "judge": -1
-  },
-  {
-   "name": "東京エレクトロン",
-   "sym": "8035.T",
-   "cat": "日本株",
-   "via": "yahoo",
-   "last": "2026-10-02",
-   "close": 12100,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-18",
-    "price": 12100
-   },
-   "judge": 1
-  },
-  {
-   "name": "キーエンス",
-   "sym": "6857.T",
-   "cat": "日本株",
-   "via": "yahoo",
-   "last": "2026-10-02",
-   "close": 38630,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-30",
-    "price": 38630
-   },
-   "judge": 1
-  },
-  {
-   "name": "マイクロソフト",
-   "sym": "MSFT",
-   "cat": "米国株",
-   "via": "yahoo",
-   "last": "2026-10-02",
-   "close": 517.530029296875,
-   "signal": {
-    "type": "buy",
-    "date": "2026-09-25",
-    "price": 517.53
-   },
-   "judge": 1
-  },
-  {
-   "name": "ユーロドル",
-   "sym": "EURUSD=X",
+   "name": "ポンドドル",
+   "sym": "GBPUSD=X",
    "cat": "FX",
    "via": "yahoo",
    "last": "2026-10-02",
-   "close": 1.1257457733154297,
+   "close": 1.324047327041626,
    "signal": {
     "type": "sell",
-    "date": "2026-09-14",
-    "price": 1.126
+    "date": "2026-09-15",
+    "price": 1.324
    },
    "judge": -1
   },
@@ -300,92 +468,60 @@
    "sym": "XRP-JPY",
    "cat": "仮想通貨",
    "via": "yahoo",
-   "last": "2026-10-03",
-   "close": 234.1702117919922,
+   "last": "2026-10-04",
+   "close": 235.35911560058594,
    "signal": {
     "type": "sell",
     "date": "2026-09-28",
-    "price": 234.17
+    "price": 235.359
    },
    "judge": -1
   },
   {
-   "name": "日立",
-   "sym": "6501.T",
+   "name": "任天堂",
+   "sym": "7974.T",
    "cat": "日本株",
    "via": "yahoo",
    "last": "2026-10-02",
-   "close": 5522,
+   "close": 7849,
    "signal": {
     "type": "sell",
-    "date": "2026-09-02",
-    "price": 5522
+    "date": "2026-09-28",
+    "price": 7849
    },
-   "judge": 1
-  },
-  {
-   "name": "ソニーグループ",
-   "sym": "6758.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "三菱UFJ",
-   "sym": "8306.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "ソフトバンクG",
-   "sym": "9984.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "ファーストリテイリング",
-   "sym": "9983.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "ダイキン工業",
-   "sym": "6367.T",
-   "cat": "日本株",
-   "error": "all sources failed"
+   "judge": -1
   },
   {
    "name": "信越化学",
    "sym": "4063.T",
    "cat": "日本株",
-   "error": "all sources failed"
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 6030,
+   "signal": {
+    "type": "sell",
+    "date": "2026-09-04",
+    "price": 6030
+   },
+   "judge": 1
   },
   {
-   "name": "KDDI",
-   "sym": "9433.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "ホンダ",
-   "sym": "7267.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "NEXT FUNDS TOPIX",
-   "sym": "1306.T",
-   "cat": "日本株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "NYダウ",
-   "sym": "^DJI",
+   "name": "アップル",
+   "sym": "AAPL",
    "cat": "米国株",
-   "error": "all sources failed"
+   "via": "yahoo",
+   "last": "2026-10-02",
+   "close": 333.69000244140625,
+   "signal": {
+    "type": "buy",
+    "date": "2026-09-11",
+    "price": 333.69
+   },
+   "judge": -1
   },
   {
-   "name": "NASDAQ",
-   "sym": "^IXIC",
+   "name": "S&P500",
+   "sym": "^GSPC",
    "cat": "米国株",
    "error": "all sources failed"
   },
@@ -404,40 +540,8 @@
    "judge": 1
   },
   {
-   "name": "アップル",
-   "sym": "AAPL",
-   "cat": "米国株",
-   "error": "all sources failed"
-  },
-  {
-   "name": "ポンド円",
-   "sym": "GBPJPY=X",
-   "cat": "FX",
-   "error": "all sources failed"
-  },
-  {
-   "name": "ポンドドル",
-   "sym": "GBPUSD=X",
-   "cat": "FX",
-   "error": "all sources failed"
-  },
-  {
    "name": "ブレント先物",
    "sym": "BZ=F",
-   "cat": "原油",
-   "via": "yahoo",
-   "last": "2026-10-02",
-   "close": 102.25,
-   "signal": {
-    "type": "sell",
-    "date": "2026-09-17",
-    "price": 102.25
-   },
-   "judge": -1
-  },
-  {
-   "name": "WTI先物",
-   "sym": "CL=F",
    "cat": "原油",
    "error": "all sources failed"
   }
