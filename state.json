@@ -40,9 +40,9 @@
   "price": 233.95
  },
  "USDJPY=X": {
-  "type": "sell",
-  "date": "2026-10-05",
-  "price": 157.493
+  "type": "buy",
+  "date": "2026-09-15",
+  "price": 157.8
  },
  "EURJPY=X": {
   "type": "sell",
@@ -91,8 +91,8 @@
  },
  "DOGE-JPY": {
   "type": "buy",
-  "date": "2026-09-19",
-  "price": 15.28
+  "date": "2026-09-18",
+  "price": 15.243
  },
  "SOL-JPY": {
   "type": "buy",
@@ -180,9 +180,9 @@
   "price": 2917.5
  },
  "6501.T": {
-  "type": "sell",
-  "date": "2026-09-02",
-  "price": 5568
+  "type": "buy",
+  "date": "2026-10-05",
+  "price": 5623
  },
  "GC=F": {
   "type": "sell",
