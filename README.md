@@ -54,3 +54,11 @@
 
 書式: `銘柄名,記号,分類,ボックス`（ボックス=監視に使う箱の値。日本株なら株価の動きに合わせ 5〜100 など。例 `#`で始まる行は無視）
 記号の書き方（Yahoo形式）: 日本株 `7203.T` ／ 米国株 `AAPL` ／ 指数 `^N225`・`^DJI` ／ FX `USDJPY=X` ／ 先物 `CL=F` ／ 仮想通貨(円) `BTC-JPY`・(ドル) `BTC-USD`
+
+## 画面から銘柄を追加・削除（2026-10-07 追加機能）
+一覧ページの「**銘柄を管理**」ボタンから、GitHubのファイル編集なしで銘柄を追加・削除できます:
+
+- **手軽な方法（トークン設定1回だけ）**: パネル内「GitHubに直接保存する」を開き、ユーザー名・リポジトリ名・トークンを入力 → 「GitHubに保存」。トークンは GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** で作り、対象リポジトリを signal-monitor に限定、Permissions で **Contents: Read and write**（自動実行もするなら **Actions: Read and write** も）を許可します。チェックを入れるとブラウザに記憶します。
+- **トークンを作りたくない場合**: パネルで編集 → 「CSVをダウンロード」→ GitHubの「Upload files」で symbols.csv を入れ替え（従来どおりの手順）。
+- 保存時に「保存後に監視を実行する」にチェックがあれば、そのままデータ取得と再計算が走ります。1〜2分後に「再読込」で一覧を更新してください。
+- GitHubのWeb画面で symbols.csv を直接編集する方法も引き続き使えます（行頭に # で一時休止）。

@@ -11,6 +11,11 @@
   body{background:var(--paper); color:var(--ink); line-height:1.6;
     font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Noto Sans CJK JP",sans-serif}
   .serif{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif}
+  button, select, input{font:inherit; color:var(--ink)}
+  button{font-size:.78rem; border:1.5px solid var(--ink); background:var(--card);
+    padding:3px 14px; cursor:pointer; border-radius:2px}
+  button.primary{background:var(--ink); color:var(--paper)}
+  button:disabled{opacity:.45; cursor:default}
   header{border-bottom:2px solid var(--ink); padding:14px 20px 12px; background:var(--paper)}
   header h1{font-size:1.12rem; letter-spacing:.06em; font-weight:700}
   header h1 small{font-size:.72rem; color:var(--ink-soft); margin-left:.6em; letter-spacing:.15em}
@@ -19,6 +24,7 @@
   .chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px}
   .chip{font-size:.68rem; border:1.5px solid var(--ink); background:var(--card); padding:1px 10px; border-radius:2px}
   .chip.b{background:var(--buy-soft)} .chip.s{background:var(--sell-soft)}
+  .hdr-btns{margin-top:8px; display:flex; gap:8px; flex-wrap:wrap}
   main{max-width:960px; margin:16px auto; padding:0 12px 40px}
   .note{font-size:.72rem; color:var(--ink-soft); border-left:3px solid var(--gold); padding:2px 0 2px 10px; margin-bottom:14px}
   table{border-collapse:collapse; width:100%; background:var(--card); font-size:.86rem}
@@ -34,18 +40,86 @@
   .via{font-size:.68rem; color:var(--ink-soft); border:1px solid var(--line); padding:0 6px; border-radius:2px; background:var(--paper-2)}
   .num{font-family:"SFMono-Regular",Consolas,"Courier New",monospace; text-align:right; white-space:nowrap}
   footer{max-width:960px; margin:0 auto; padding:10px 12px 30px; font-size:.68rem; color:var(--ink-soft)}
+  /* ---- 銘柄管理パネル ---- */
+  .ov{position:fixed; inset:0; background:rgba(38,41,46,.55); z-index:50; display:flex; align-items:flex-start; justify-content:center; overflow:auto; padding:24px 10px}
+  .ov[hidden]{display:none}
+  .panel{background:var(--card); border:2px solid var(--ink); width:680px; max-width:100%; padding:16px 18px; box-shadow:0 10px 30px rgba(38,41,46,.3)}
+  .panel h2{font-size:.95rem; margin-bottom:2px}
+  .panel .sub{font-size:.7rem; color:var(--ink-soft); margin-bottom:10px}
+  .mmsg{font-size:.76rem; min-height:1.4em; margin-bottom:8px}
+  .mmsg.ok{color:#2e7d32; font-weight:700} .mmsg.bad{color:var(--buy); font-weight:700}
+  .mhead,.mrow{display:grid; grid-template-columns:1fr 130px 90px 80px 60px; gap:6px; align-items:center}
+  .mhead{font-size:.66rem; letter-spacing:.12em; color:var(--ink-soft); font-weight:700; padding-bottom:3px; border-bottom:1.5px solid var(--ink)}
+  .mrow{padding:3px 0; border-bottom:1px dashed var(--line)}
+  .mrow input[type=text], .mrow input[type=number], .mrow select, .addform input, .addform select{
+    border:1.5px solid var(--ink); background:var(--paper); padding:3px 7px; border-radius:2px; width:100%; font-size:.78rem}
+  .mrow .symi{font-family:"SFMono-Regular",Consolas,"Courier New",monospace}
+  .mrow button{font-size:.7rem; padding:2px 8px}
+  .addform{display:grid; grid-template-columns:1fr 130px 90px 80px 60px; gap:6px; margin-top:10px; align-items:center}
+  .addform .lab{grid-column:1/-1; font-size:.7rem; color:var(--gold); font-weight:700; letter-spacing:.1em}
+  .msave{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:14px; padding-top:10px; border-top:1.5px solid var(--ink)}
+  .msave label{font-size:.74rem; display:flex; gap:5px; align-items:center; margin-right:auto}
+  details.gh{margin-top:12px; font-size:.74rem}
+  details.gh summary{cursor:pointer; color:var(--gold); font-weight:700; letter-spacing:.06em}
+  details.gh .ghin{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px}
+  details.gh .ghin .full{grid-column:1/-1}
+  details.gh input{border:1.5px solid var(--ink); background:var(--paper); padding:3px 7px; border-radius:2px; width:100%; font-size:.76rem}
+  details.gh .hint{font-size:.68rem; color:var(--ink-soft); grid-column:1/-1; line-height:1.7}
+  .mfoot{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
 </style></head><body>
 <header>
   <h1 class="serif">売買シグナル一覧<small>サーバー監視版・手動更新</small></h1>
   <div id="status">読み込み中…</div>
   <div class="chips" id="chips"></div>
+  <div class="hdr-btns">
+    <button id="btn-reload" type="button">再読込</button>
+    <button id="btn-manage" type="button" class="primary">銘柄を管理</button>
+  </div>
 </header>
 <main>
-<p class="note">この一覧は「必要な時だけ」更新します。GitHubのActionsタブ → signal-monitor → <b>Run workflow</b> を押すと、サーバーがデータを取りに行って一覧を作り直します。このページを開きっぱなしにしても勝手に取りに行きません（「再読込」ボタンで表示を更新）。</p>
+<p class="note">この一覧は「必要な時だけ」更新します。GitHubのActionsタブ → signal-monitor → <b>Run workflow</b> を押すと、サーバーがデータを取りに行って一覧を作り直します。<b>銘柄の追加・削除は「銘柄を管理」ボタンからどうぞ</b>（保存後、監視を実行すると一覧に反映されます）。</p>
 <table><thead><tr><th>銘柄</th><th>記号</th><th>分類</th><th>最新シグナル</th><th>シグナル日</th><th>終値</th><th>ジャッジ</th><th>取得元</th></tr></thead>
 <tbody id="tb"><tr><td colspan="8">読み込み中…</td></tr></tbody></table>
 </main>
 <footer>計算ロジックは Excel（pfc3）と同じエンジンを使用。シグナルが出た銘柄はメール／LINEにも通知されます。</footer>
+
+<div id="ov" class="ov" hidden>
+  <div class="panel">
+    <h2 class="serif">銘柄を管理</h2>
+    <div class="sub">symbols.csv を編集して保存します。行の右端「削除」で消し、下のフォームで追加できます。ボックス（監視の値幅）も変更できます。</div>
+    <div id="mmsg" class="mmsg"></div>
+    <div class="mhead"><div>銘柄名</div><div>記号</div><div>分類</div><div>ボックス</div><div>操作</div></div>
+    <div id="mlist"></div>
+    <div class="addform">
+      <div class="lab">▼ 銘柄を追加</div>
+      <input type="text" id="a-n" placeholder="銘柄名（例：三井物産）">
+      <input type="text" id="a-s" class="symi" placeholder="8031.T" autocomplete="off">
+      <select id="a-c"></select>
+      <input type="number" id="a-b" value="20" step="any" min="0.001">
+      <button id="a-add" type="button">追加</button>
+    </div>
+    <details class="gh">
+      <summary>GitHubに直接保存する（初回だけトークン設定）</summary>
+      <div class="ghin">
+        <div><input type="text" id="gh-o" placeholder="ユーザー名（例：your-id）"></div>
+        <div><input type="text" id="gh-r" placeholder="リポジトリ名（例：signal-monitor）"></div>
+        <div class="full"><input type="password" id="gh-t" placeholder="GitHubトークン（ghp_… または github_pat_…）" autocomplete="off"></div>
+        <label class="full" style="font-size:.7rem"><input type="checkbox" id="gh-rem" checked> トークンをこのブラウザに記憶する</label>
+        <div class="hint">トークンの作り方： GitHub → 右上の自分のアイコン → Settings → Developer settings → Personal access tokens → <b>Fine-grained tokens</b> → Generate new token。リポジトリは signal-monitor だけを選び、Permissions で <b>Contents: Read and write</b>（保存後に自動実行もしたい場合は <b>Actions: Read and write</b> も）にして発行します。トークンは GitHub以外には送られません（このページから api.github.com へ直接通信します）。</div>
+      </div>
+    </details>
+    <div class="msave">
+      <label><input type="checkbox" id="m-run" checked> 保存後に監視を実行する</label>
+      <button id="m-dl" type="button">CSVをダウンロード</button>
+      <button id="m-save" type="button" class="primary">GitHubに保存</button>
+      <button id="m-close" type="button">閉じる</button>
+    </div>
+    <div class="mfoot">
+      <label style="font-size:.7rem; color:var(--ink-soft)">CSVファイルから読み込む <input type="file" id="m-file" accept=".csv,text/csv" style="font-size:.68rem"></label>
+    </div>
+  </div>
+</div>
+
 <script>
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function load(){
@@ -68,12 +142,136 @@ function load(){
     }).join('');
   }).catch(() => { document.getElementById('status').textContent = 'signals.json を読み込めませんでした（初回実行前にこのページを見ると出ます。Actionsを一度実行してください）'; });
 }
-load();   /* 自動再読込はしない。必要な時だけ下のボタンかブラウザの再読み込みで更新 */
+/* ---------- 銘柄管理 ---------- */
+const CATS_DEFAULT = ['日本株','FX','米国株','指数','商品','仮想通貨','その他'];
+function parseCsvLine(line){
+  const out = []; let cur = '', q = false;
+  for (let i = 0; i < line.length; i++){
+    const ch = line[i];
+    if (q){ if (ch === '"'){ if (line[i+1] === '"'){ cur += '"'; i++; } else q = false; } else cur += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ','){ out.push(cur); cur = ''; }
+    else cur += ch;
+  }
+  out.push(cur); return out.map(s => s.trim());
+}
+function parseSymbolsCsv(text){
+  const rows = [];
+  text.replace(/^\uFEFF/, '').split(/\r?\n/).forEach(l => {
+    l = l.trim(); if (!l || l.startsWith('#')) return;
+    const c = parseCsvLine(l);
+    if (/^銘柄名/.test(c[0])) return;
+    if (c.length < 2 || !c[1]) return;
+    const b = parseFloat(c[3]);
+    rows.push({ n: c[0] || c[1], s: c[1], c: c[2] || 'その他', b: isFinite(b) && b > 0 ? b : 20 });
+  });
+  return rows;
+}
+function buildSymbolsCsv(){
+  const q = v => /[,"]/.test(v) ? '"' + String(v).replace(/"/g, '""') + '"' : v;
+  const rows = [...document.querySelectorAll('#mlist .mrow')].map(r => {
+    const g = c => r.querySelector(c);
+    return [g('.ni').value.trim() || g('.si').value.trim(), g('.si').value.trim(), g('.ci').value, g('.bi').value];
+  }).filter(a => a[1]);
+  return '銘柄名,記号,分類,ボックス\n' + rows.map(a => [q(a[0]), q(a[1]), q(a[2]), a[3]].join(',')).join('\n') + '\n';
+}
+function mrowHtml(it){
+  const opts = CATS_DEFAULT.map(c => '<option' + (c === it.c ? ' selected' : '') + '>' + c + '</option>').join('');
+  return '<div class="mrow"><input type="text" class="ni" value="' + esc(it.n) + '">'
+    + '<input type="text" class="si symi" value="' + esc(it.s) + '" autocomplete="off">'
+    + '<select class="ci">' + opts + '</select>'
+    + '<input type="number" class="bi" value="' + esc(it.b) + '" step="any" min="0.001">'
+    + '<button type="button" class="del">削除</button></div>';
+}
+function mmsg(text, cls){ const m = document.getElementById('mmsg'); m.textContent = text; m.className = 'mmsg ' + (cls || ''); }
+function openManage(){
+  document.getElementById('ov').hidden = false; mmsg('');
+  const sel = document.getElementById('a-c');
+  if (!sel.options.length) sel.innerHTML = CATS_DEFAULT.map(c => '<option>' + c + '</option>').join('');
+  const list = document.getElementById('mlist');
+  if (!list.children.length){   /* 開いたときに一度だけ現在のリストを読み込む */
+    fetch('symbols.csv?t=' + Date.now()).then(r => { if (!r.ok) throw 0; return r.text(); })
+      .then(t => {
+        const rows = parseSymbolsCsv(t);
+        list.innerHTML = rows.map(mrowHtml).join('');
+        mmsg('現在の銘柄 ' + rows.length + '件を読み込みました');
+      })
+      .catch(() => mmsg('symbols.csv を読み込めなかったので空の状態から始めます（下の「CSVファイルから読み込む」も使えます）'));
+  }
+}
+function closeManage(){ document.getElementById('ov').hidden = true; }
 document.addEventListener('DOMContentLoaded', () => {
-  const b = document.createElement('button');
-  b.textContent = '再読込'; b.type = 'button';
-  b.style.cssText = 'font:inherit;font-size:.78rem;border:1.5px solid var(--ink);background:var(--card);padding:3px 14px;cursor:pointer;border-radius:2px;margin-top:6px';
-  b.addEventListener('click', () => { b.disabled = true; b.textContent = '読み込み中…'; load(); setTimeout(() => { b.disabled = false; b.textContent = '再読込'; }, 600); });
-  document.querySelector('header').appendChild(b);
+  const rb = document.getElementById('btn-reload');
+  rb.addEventListener('click', () => { rb.disabled = true; rb.textContent = '読み込み中…'; load(); setTimeout(() => { rb.disabled = false; rb.textContent = '再読込'; }, 600); });
+  document.getElementById('btn-manage').addEventListener('click', openManage);
+  document.getElementById('m-close').addEventListener('click', closeManage);
+  document.getElementById('ov').addEventListener('click', e => { if (e.target.id === 'ov') closeManage(); });
+  document.getElementById('mlist').addEventListener('click', e => {
+    if (e.target.classList.contains('del')){ e.target.closest('.mrow').remove(); mmsg('1行削除しました（保存するまで確定しません）'); }
+  });
+  document.getElementById('a-add').addEventListener('click', () => {
+    const n = document.getElementById('a-n'), s = document.getElementById('a-s'), b = document.getElementById('a-b');
+    if (!s.value.trim()){ mmsg('記号を入力してください（例： 8031.T ／ AAPL ／ USDJPY=X）', 'bad'); return; }
+    const dup = [...document.querySelectorAll('#mlist .si')].some(i => i.value.trim() === s.value.trim());
+    if (dup){ mmsg('その記号はすでにリストに入っています', 'bad'); return; }
+    const cat = document.getElementById('a-c').value;
+    const tmp = document.createElement('div'); tmp.innerHTML = mrowHtml({ n: n.value.trim() || s.value.trim(), s: s.value.trim(), c: cat, b: b.value || 20 });
+    document.getElementById('mlist').appendChild(tmp.firstChild);
+    n.value = ''; s.value = ''; b.value = 20;
+    mmsg('1行追加しました（保存するまで確定しません）');
+  });
+  document.getElementById('m-file').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    f.text().then(t => {
+      const rows = parseSymbolsCsv(t);
+      document.getElementById('mlist').innerHTML = rows.map(mrowHtml).join('');
+      mmsg(rows.length ? 'CSVから ' + rows.length + '件を読み込みました' : 'このCSVからは銘柄行を読み取れませんでした', rows.length ? '' : 'bad');
+    });
+  });
+  document.getElementById('m-dl').addEventListener('click', () => {
+    const blob = new Blob(['\uFEFF' + buildSymbolsCsv()], { type: 'text/csv' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'symbols.csv'; a.click();
+    mmsg('symbols.csv をダウンロードしました（GitHubのUpload filesから入れ替えると手動で反映できます）');
+  });
+  /* GitHub直接保存 */
+  const go = document.getElementById('gh-o'), gr = document.getElementById('gh-r'), gt = document.getElementById('gh-t'), gre = document.getElementById('gh-rem');
+  try {
+    if (location.hostname.endsWith('.github.io')){
+      go.value = location.hostname.split('.')[0];
+      const p = location.pathname.split('/').filter(Boolean);
+      gr.value = p[0] || go.value + '.github.io';
+    }
+    const sv = localStorage.getItem('gh_or'); if (sv){ const [a, b] = sv.split('|'); if (a) go.value = a; if (b) gr.value = b; }
+    const st = localStorage.getItem('gh_tok'); if (st){ gt.value = st; gre.checked = true; }
+  } catch(e){}
+  document.getElementById('m-save').addEventListener('click', async () => {
+    const O = go.value.trim(), R = gr.value.trim(), T = gt.value.trim(), run = document.getElementById('m-run').checked;
+    const csv = buildSymbolsCsv();
+    if (!O || !R || !T){ mmsg('ユーザー名・リポジトリ名・トークンを入力してください（「GitHubに直接保存する」を開いてください）', 'bad'); return; }
+    if (!csv.split('\n').some(l => l && !l.startsWith('銘柄名'))){ mmsg('銘柄が0件です。最低1行は必要です', 'bad'); return; }
+    const btn = document.getElementById('m-save'); btn.disabled = true;
+    try {
+      if (gre.checked){ try { localStorage.setItem('gh_or', O + '|' + R); localStorage.setItem('gh_tok', T); } catch(e){} }
+      else { try { localStorage.removeItem('gh_or'); localStorage.removeItem('gh_tok'); } catch(e){} }
+      const H = { Authorization: 'Bearer ' + T, Accept: 'application/vnd.github+json' };
+      const api = 'https://api.github.com/repos/' + encodeURIComponent(O) + '/' + encodeURIComponent(R) + '/contents/symbols.csv';
+      mmsg('保存中…');
+      let sha;
+      const g = await fetch(api, { headers: H });
+      if (g.ok) sha = (await g.json()).sha;
+      else if (g.status !== 404) throw new Error(g.status === 401 || g.status === 403 ? 'トークンが正しくないか、権限（Contents: Read and write）がありません' : 'リポジトリが見つかりません（ユーザー名/リポジトリ名を確認）');
+      const p = await fetch(api, { method: 'PUT', headers: { ...H, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: '銘柄リストを更新（一覧ページから）', content: btoa(unescape(encodeURIComponent(csv))), ...(sha ? { sha } : {}) }) });
+      if (!p.ok) throw new Error('保存に失敗しました（HTTP ' + p.status + '）');
+      if (run){
+        mmsg('保存しました。監視を実行しています…');
+        const d = await fetch('https://api.github.com/repos/' + encodeURIComponent(O) + '/' + encodeURIComponent(R) + '/actions/workflows/monitor.yml/dispatches',
+          { method: 'POST', headers: { ...H, 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: 'main' }) });
+        mmsg(d.ok ? '保存＆監視を実行しました。1〜2分後に「再読込」かページ更新で一覧が新しくなります' : '保存しました（監視の自動実行は許可が出なかったので、Actionsタブで Run workflow を押してください）', d.ok ? 'ok' : '');
+      } else mmsg('保存しました。反映は次の監視実行後です', 'ok');
+    } catch(e){ mmsg('エラー: ' + (e.message || e), 'bad'); }
+    btn.disabled = false;
+  });
 });
+load();   /* 自動再読込はしない。必要な時だけ「再読込」ボタンかブラウザの再読み込みで更新 */
 </script></body></html>
