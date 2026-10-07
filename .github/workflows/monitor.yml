@@ -1,8 +1,6 @@
 name: signal-monitor
 on:
-  schedule:
-    - cron: '5 * * * *'   # 毎時5分（日本時間の06:05/07:05/…）。自由に変更可
-  workflow_dispatch:       # Actionsタブから手動実行もできる
+  workflow_dispatch:       # Actionsタブの「Run workflow」を押した時だけ実行する（自動実行なし）
 permissions:
   contents: write
 jobs:
