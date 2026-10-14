@@ -60,12 +60,12 @@ async function getText(url){
   } finally { clearTimeout(tm); }
 }
 /* 6経路を同時に走らせ、成功した中で一番早く返ったものを採用（全員の完了を待たない） */
-function getTextRace(url){
+function getTextRace(url, valid){
   return new Promise((resolve, reject) => {
     let pending = RELAYS.length, done = false;
     RELAYS.forEach(f => {
       getText(f(url)).then(t => {
-        if (t && !done){ done = true; resolve(t); }
+        if (t && (!valid || valid(t)) && !done){ done = true; resolve(t); }
       }).catch(() => {}).finally(() => {
         if (--pending === 0 && !done) reject(new Error('all paths failed'));
       });
@@ -119,7 +119,7 @@ async function yahooChart(sym){   /* query1 → query2 の両ホストを試す 
   let err;
   for (const host of ['query1', 'query2']){
     try {
-      const j = JSON.parse(await getTextRace('https://' + host + '.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?range=10mo&interval=1d'));
+      const j = JSON.parse(await getTextRace('https://' + host + '.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym) + '?range=10mo&interval=1d', t => t.includes('"chart"')));
       const res = j.chart.result[0], ts = res.timestamp || [], q = res.indicators.quote[0].close || [];
       const dates = [], closes = [];
       for (let i = 0; i < ts.length; i++){ if (q[i] != null && isFinite(q[i])){ dates.push(new Date(ts[i] * 1000).toISOString().slice(0, 10)); closes.push(q[i]); } }
@@ -129,8 +129,53 @@ async function yahooChart(sym){   /* query1 → query2 の両ホストを試す 
   }
   throw err;
 }
-async function fetchOne(sym){   /* Yahoo → Stooq → CoinGecko の順 */
+async function fetchFrankfurter(sym){   /* 欧州中央銀行の為替レート（frankfurter・無料・登録不要・API規制なし） */
+  const m = /^([A-Z]{3})([A-Z]{3})=X$/.exec(sym);
+  if (!m) throw new Error('not fx');
+  const start = new Date(Date.now() - 400 * 864e5).toISOString().slice(0, 10);
+  const j = JSON.parse(await getTextRace('https://api.frankfurter.app/' + start + '..?from=' + m[1] + '&to=' + m[2], t => t.includes('"rates"')));
+  const dates = Object.keys(j.rates).sort(), closes = dates.map(d => j.rates[d][m[2]]);
+  if (dates.length >= 40 && closes.every(isFinite)) return { dates, closes, via: 'frankfurter' };
+  throw new Error('frankfurter short');
+}
+async function fetchYahooJp(sym){   /* Yahoo!ファイナンス（日本版）の履歴ページ（APIでなくページ内蔵データ） */
+  if (!/^\d{4}\.T$/.test(sym)) throw new Error('not .T');
+  const rows = {}, base = new Date();
+  for (let k = 0; k < 1 && Object.keys(rows).length < 60; k++){
+    const d = new Date(base.getFullYear(), base.getMonth() - k, 1);
+    const ym = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0');
+    let html;
+    try { html = await getTextRace('https://finance.yahoo.co.jp/quote/' + encodeURIComponent(sym) + '/history' + (k ? '?ym=' + ym : ''), t => t.includes('histories')); }
+    catch(e){ continue; }
+    const flat = html.split('\\"').join('"');
+    /* 「histories」配列が日次/週次/月次で複数入ることがあるため、最も行数が多い区画を日次として採用する */
+    const segs = flat.split('"histories"').slice(1);
+    let best = null;
+    for (const seg of segs){
+      const rows2 = {};
+      const re = /"date":"(\d{4}-\d{2}-\d{2})","values":\[([\s\S]*?)\]/g;
+      let m;
+      while ((m = re.exec(seg))){
+        const nums = (m[2].match(/"value":"([\d,.]+)"/g) || []).map(x => parseFloat(x.replace(/[^\d.]/g, '')));
+        if (nums.length >= 4 && isFinite(nums[3])) rows2[m[1]] = nums[3];
+      }
+      const cnt = Object.keys(rows2).length;
+      if (cnt > (best ? best.cnt : 0)) best = { cnt, rows2 };
+    }
+    if (best) for (const d in best.rows2) rows[d] = best.rows2[d];
+    await sleep(300);
+  }
+  const ds0 = Object.keys(rows).sort();
+  const med = (() => { const v = ds0.map(d => rows[d]).sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; })();
+  for (const d of ds0) if (rows[d] < med * 0.25 || rows[d] > med * 4) delete rows[d];
+  const dates = Object.keys(rows).sort();
+  if (dates.length >= 30) return { dates, closes: dates.map(dd => rows[dd]), via: 'yahoojp' };
+  throw new Error('yahoojp short: ' + dates.length);
+}
+async function fetchOne(sym){   /* Yahoo → (FXはfrankfurter/日本株はYahoo!ファイナンス日本版) → Stooq の順 */
   try { return await yahooChart(sym); } catch(e1){}
+  if (/^[A-Z]{6}=X$/.test(sym)){ try { return await fetchFrankfurter(sym); } catch(e){} }
+  if (/^\d{4}\.T$/.test(sym)){ try { return await fetchYahooJp(sym); } catch(e){} }
   const ss = stooqSym(sym);
   if (ss){
     try { const r = parseCSV(await getTextRace('https://stooq.com/q/d/l/?s=' + encodeURIComponent(ss) + '&i=d'));
