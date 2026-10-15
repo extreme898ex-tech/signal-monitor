@@ -1,1 +1,57 @@
-{}
+{
+ "1605.T": {
+  "type": "sell",
+  "date": "2026-09-18",
+  "price": 3639
+ },
+ "2117.T": {
+  "type": "sell",
+  "date": "2026-10-02",
+  "price": 2793
+ },
+ "USDJPY=X": {
+  "type": "buy",
+  "date": "2026-10-05",
+  "price": 158.45
+ },
+ "EURJPY=X": {
+  "type": "sell",
+  "date": "2026-10-13",
+  "price": 177.39
+ },
+ "GBPJPY=X": {
+  "type": "buy",
+  "date": "2026-10-14",
+  "price": 210.22
+ },
+ "AUDJPY=X": {
+  "type": "buy",
+  "date": "2026-10-14",
+  "price": 111.07
+ },
+ "CADJPY=X": {
+  "type": "sell",
+  "date": "2026-09-25",
+  "price": 111.44
+ },
+ "CHFJPY=X": {
+  "type": "sell",
+  "date": "2026-09-28",
+  "price": 190.13
+ },
+ "EURUSD=X": {
+  "type": "sell",
+  "date": "2026-10-07",
+  "price": 1.12
+ },
+ "GBPUSD=X": {
+  "type": "sell",
+  "date": "2026-09-23",
+  "price": 1.327
+ },
+ "AUDUSD=X": {
+  "type": "buy",
+  "date": "2026-10-14",
+  "price": 0.701
+ }
+}

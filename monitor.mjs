@@ -44,6 +44,11 @@ const UA = { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const nowJST = () => new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
 
+/* キャッシュ: 一度でも取れたデータを cache.json に保存し、全ソースが失敗した銘柄は
+ * 保存済みデータで計算を続ける（シグナルが消えない・次回以降も使い回す） */
+const CACHE_F = 'cache.json';
+const cache = existsSync(CACHE_F) ? JSON.parse(readFileSync(CACHE_F, 'utf8')) : {};
+
 const RELAYS = [
   u => u,                                                              /* 直接続 */
   u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
@@ -205,7 +210,15 @@ async function notify(text){
   const out = [], news = [];
   async function one(it){
     try {
-      const d = await fetchOne(it.s);
+      let d;
+      try {
+        d = await fetchOne(it.s);
+        cache[it.s] = { dates: d.dates, closes: d.closes, ts: new Date().toISOString().slice(0, 10) };
+      } catch(e1){
+        const c = cache[it.s];
+        if (c && c.closes && c.closes.length >= 30) d = { dates: c.dates, closes: c.closes, via: 'cache(' + c.ts + ')' };
+        else throw e1;
+      }
       const box = it.boxes.find(b => b > 0) || 20;
       const pf = E.pfChart(d.closes, d.dates, box, 3) || {};
       const js = E.judgeSignals(d.closes, d.dates);
@@ -232,6 +245,7 @@ async function notify(text){
       await sleep(500);
     }
   }
+  try { writeFileSync(CACHE_F, JSON.stringify(cache)); } catch(e){}
   const prevOut = existsSync('signals.json') ? JSON.parse(readFileSync('signals.json', 'utf8')) : null;
   writeFileSync('signals.json', JSON.stringify({ generated_at: nowJST(), results: out }, null, 1));
   writeFileSync('state.json', JSON.stringify(state, null, 1));
