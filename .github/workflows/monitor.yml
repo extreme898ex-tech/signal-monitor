@@ -22,6 +22,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add signals.json state.json
+          git add signals.json state.json cache.json
           git diff --cached --quiet || git commit -m "update signals $(date -u +%FT%TZ)"
           git push
